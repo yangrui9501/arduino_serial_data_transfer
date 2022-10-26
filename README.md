@@ -1,2 +1,2 @@
-# Serail_Data_Transfer
+# Serial_Data_Transfer
 
