@@ -28,12 +28,12 @@ int SerialDataTransfer::Receive(void *_dest)
             }
             else
             {
-                uart_data_status = UART_Data_Status::Loss_Finish_Byte;
+                uart_data_status = DATA_LOST_FINISH_BYTE;
             }
         }
         else
         {
-            uart_data_status = UART_Data_Status::Loss_Begin_Byte;
+            uart_data_status = DATA_LOST_BEGIN_BYTE;
         }
     }
     return uart_data_status;
