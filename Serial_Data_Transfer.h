@@ -13,16 +13,16 @@
 
 #include <Arduino.h>
 
-class Serial_Data_Transfer
+class SerialDataTransfer
 {
 public:
-    Serial_Data_Transfer() { }
+    SerialDataTransfer() { }
     enum UART_Data_Status
     {
-        OK = 0,
-        Not_Yet_Ready,
+        Loss_Finish_Byte = -3,
         Loss_Begin_Byte,
-        Loss_Finish_Byte
+        Not_Yet_Ready,
+        OK
     };
 
     void Init(HardwareSerial &_uart_handler, uint32_t _baud_rate, int _num_of_bytes_to_receive);
