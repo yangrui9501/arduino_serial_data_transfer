@@ -1,6 +1,6 @@
-#include "uart_data_transfer.h"
+#include "serial_data_transfer.h"
 
-void UARTDataTransfer::init(HardwareSerial &_uart_handler,
+void SerialDataTransfer::init(HardwareSerial &_uart_handler,
                               uint32_t _baud_rate,
                               int _num_of_bytes_to_receive,
                               uint8_t _start_byte,
@@ -24,7 +24,7 @@ void UARTDataTransfer::init(HardwareSerial &_uart_handler,
     }
 }
 
-int UARTDataTransfer::receive(void *_dest)
+int SerialDataTransfer::receive(void *_dest)
 {
     uart_data_status = DATA_NOT_YET_READY;
     while (pUART->available() >= (num_of_bytes_to_receive + 2))
@@ -53,7 +53,7 @@ int UARTDataTransfer::receive(void *_dest)
     return uart_data_status;
 }
 
-void UARTDataTransfer::transmit(void *_src, int num_of_bytes_to_transmit)
+void SerialDataTransfer::transmit(void *_src, int num_of_bytes_to_transmit)
 {
     pUART->write(&start_byte, 1);
     pUART->write((uint8_t *)_src, num_of_bytes_to_transmit);

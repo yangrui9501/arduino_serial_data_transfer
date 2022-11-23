@@ -13,11 +13,11 @@
 
 #include <Arduino.h>
 
-class UARTDataTransfer
+class SerialDataTransfer
 {
 public:
-    UARTDataTransfer() { }
-    enum UART_DATA_STATUS
+    SerialDataTransfer() { }
+    enum SERIAL_DATA_STATUS
     {
         DATA_LOST_FINISH_BYTE = -3,
         DATA_LOST_BEGIN_BYTE,
