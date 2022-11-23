@@ -1,1 +1,1 @@
-linguist-language=Arduino
+*.rb linguist-language = Arduino
