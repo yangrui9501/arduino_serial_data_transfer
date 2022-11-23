@@ -1,32 +1,68 @@
-# Arduino Library - UART Data Transfer
+# Arduino Library - Serial Data Transfer
 
-This is an Arduino library of performing the uart data communication.
+This library implements the `binary-encoded data` transmitting/receiving based on Arduino's `HardwareSerial` APIs. The following demonstrated the simple examples for how to use this library performing the data IO.
 
-## Example: transmitter
+Date: November 24, 2021
+
+## Data Transmitter
 
 ```cpp
 #include <Arduino.h>
-#include <uart_data_transfer.h>
+#include <serial_data_transfer.h>
 
 #define HARDWARE_SERIAL_INTERFACE Serial1
 #define HARDWARE_SERIAL_BAUD_RATE 115200
 
-UARTDataTransfer uart_transmitter;
+SerialDataTransfer DataTx;
 typedef struct
 {
-    float value[10];
-    uint8_t byte[sizeof(float) * 10U];
+    float data1[3];
+    int data2[2];
 } uart_data_t;
 uart_data_t uart_data;
 
 void setup()
 {
-    uart_transmitter.init(HARDWARE_SERIAL_INTERFACE, HARDWARE_SERIAL_BAUD_RATE);
+    DataTx.init(HARDWARE_SERIAL_INTERFACE, HARDWARE_SERIAL_BAUD_RATE);
 }
 
 void loop()
 {
-    uart_transmitter.transmit(uart_data.byte, sizeof(uart_data_t));
+    DataTx.transmit(&uart_data sizeof(uart_data_t));
+    delay(1);
+}
+```
+
+## Date Receiver
+
+```cpp
+#include <Arduino.h>
+#include <serial_data_transfer.h>
+
+#define HARDWARE_SERIAL_INTERFACE Serial1
+#define HARDWARE_SERIAL_BAUD_RATE 115200
+
+SerialDataTransfer DataRx;
+typedef struct
+{
+    float data1[3];
+    int data2[2];
+} uart_data_t;
+uart_data_t uart_data;
+
+void setup()
+{
+    DataRx.init(HARDWARE_SERIAL_INTERFACE, HARDWARE_SERIAL_BAUD_RATE, sizeof(uart_data_t));
+}
+
+void loop()
+{
+    int uart_data_status = DataRx.receive(&uart_data);
+    if (uart_data_status == SerialDataTransfer::DATA_OK) // It means the process of binary decoding is successful.
+    {
+        // Do something if the date is received:
+    }
+
     delay(1);
 }
 ```
