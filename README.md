@@ -1,6 +1,6 @@
 # Arduino Library - Serial Data Transfer
 
-This library implements the `binary-encoded data` transmitting/receiving based on Arduino's `HardwareSerial` APIs. The following demonstrated the simple examples for how to use this library performing the data IO.
+This library implements the `binary-encoded data` transmitting/receiving based on Arduino `HardwareSerial` APIs. The following demonstrated simple examples of how to use this library to perform the data IO.
 
 Date: November 24, 2021
 
