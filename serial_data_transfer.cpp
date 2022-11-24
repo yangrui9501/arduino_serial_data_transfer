@@ -4,7 +4,8 @@ void SerialDataTransfer::init(HardwareSerial &_uart_handler,
                               uint32_t _baud_rate,
                               int _num_of_bytes_to_receive,
                               uint8_t _start_byte,
-                              uint8_t _finish_byte)
+                              uint8_t _finish_byte,
+                              uint16_t _format)
 {
     pUART = &_uart_handler;
     num_of_bytes_to_receive = _num_of_bytes_to_receive;
@@ -13,7 +14,7 @@ void SerialDataTransfer::init(HardwareSerial &_uart_handler,
     finish_byte = _finish_byte;
 
     /* Variable Initialization */
-    pUART->begin(_baud_rate);
+    pUART->begin(_baud_rate, _format);
     if (_num_of_bytes_to_receive == -1)
     {
         buf = NULL;

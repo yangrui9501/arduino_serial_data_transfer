@@ -25,7 +25,7 @@ public:
         DATA_OK
     };
 
-    void init(HardwareSerial &_uart_handler, uint32_t _baud_rate, int _num_of_bytes_to_receive = -1, uint8_t _start_byte = 0xAA, uint8_t _finish_byte = 0xBB);
+    void init(HardwareSerial &_uart_handler, uint32_t _baud_rate, int _num_of_bytes_to_receive = -1, uint8_t _start_byte = 0xAA, uint8_t _finish_byte = 0xBB, uint16_t _format = SERIAL_8N1);
     int receive(void *_dest);
     void transmit(void *_src, int num_of_bytes_to_transmit);
 
