@@ -1,28 +1,22 @@
 #include "serial_data_transfer.h"
 
-void SerialDataTransfer::init(HardwareSerial &_uart_handler,
-                              uint32_t _baud_rate,
-                              int _num_of_bytes_to_receive,
-                              uint8_t _start_byte,
-                              uint8_t _finish_byte,
-                              uint16_t _format)
+void SerialDataTransfer::init(HardwareSerial &_uart_handler, uint32_t _baud_rate, int _format, uint8_t _start_byte, uint8_t _finish_byte)
 {
     pUART = &_uart_handler;
-    num_of_bytes_to_receive = _num_of_bytes_to_receive;
-
     start_byte = _start_byte;
     finish_byte = _finish_byte;
-
-    /* Variable Initialization */
     pUART->begin(_baud_rate, _format);
-    if (_num_of_bytes_to_receive == -1)
+}
+
+int SerialDataTransfer::set_rx_buffer(size_t _dest_package_size)
+{
+    num_of_bytes_to_receive = _dest_package_size;
+    buf = new uint8_t[num_of_bytes_to_receive];
+    if (buf != NULL)
     {
-        buf = NULL;
+        return 0;
     }
-    else
-    {
-        buf = new uint8_t[_num_of_bytes_to_receive];
-    }
+    return -1;
 }
 
 int SerialDataTransfer::receive(void *_dest)
