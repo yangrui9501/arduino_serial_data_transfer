@@ -48,9 +48,16 @@ int SerialDataTransfer::receive(void *_dest)
     return uart_data_status;
 }
 
-void SerialDataTransfer::transmit(void *_src, int num_of_bytes_to_transmit)
+int SerialDataTransfer::transmit(void *_src, int num_of_bytes_to_transmit)
 {
-    pUART->write(&start_byte, 1);
-    pUART->write((uint8_t *)_src, num_of_bytes_to_transmit);
-    pUART->write(&finish_byte, 1);
+    if (pUART->availableForWrite() >= num_of_bytes_to_transmit )
+    {
+        pUART->write(&start_byte, 1);
+        pUART->write((uint8_t *)_src, num_of_bytes_to_transmit);
+        pUART->write(&finish_byte, 1);
+        // pUART->flush();
+
+        return 0;
+    }
+    return -1;
 }

@@ -28,8 +28,16 @@ public:
     void init(HardwareSerial &_uart_handler, uint32_t _baud_rate, int _format = SERIAL_8N1, uint8_t _start_byte = 0xAA, uint8_t _finish_byte = 0xBB);
     int set_rx_buffer(size_t _dest_package_size);
     int receive(void *_dest);
-    void transmit(void *_src, int num_of_bytes_to_transmit);
-
+    int transmit(void *_src, int num_of_bytes_to_transmit);
+    void add_memory_for_write(size_t _buffer_size)
+    {
+        buf_write = new uint8_t[_buffer_size];
+        pUART->addMemoryForWrite(buf_write, _buffer_size);
+    }
+    HardwareSerial &get_serial_obj()
+    {
+        return *pUART;
+    }
 protected:
     uint8_t start_byte;
     uint8_t finish_byte;
@@ -37,4 +45,5 @@ protected:
     int uart_data_status;
     int num_of_bytes_to_receive;
     uint8_t *buf;
+    uint8_t *buf_write;
 };
