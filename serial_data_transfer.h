@@ -32,7 +32,7 @@ public:
     void add_memory_for_write(size_t _buffer_size)
     {
         buf_write = new uint8_t[_buffer_size];
-        pUART->addMemoryForWrite(buf_write, _buffer_size);
+        // pUART->addMemoryForWrite(buf_write, _buffer_size);
     }
     HardwareSerial &get_serial_obj()
     {
