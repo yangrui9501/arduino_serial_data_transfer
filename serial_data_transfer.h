@@ -29,11 +29,6 @@ public:
     int set_rx_buffer(size_t _dest_package_size);
     int receive(void *_dest);
     int transmit(void *_src, int num_of_bytes_to_transmit);
-    void add_memory_for_write(size_t _buffer_size)
-    {
-        buf_write = new uint8_t[_buffer_size];
-        // pUART->addMemoryForWrite(buf_write, _buffer_size);
-    }
     HardwareSerial &get_serial_obj()
     {
         return *pUART;
@@ -45,5 +40,4 @@ protected:
     int uart_data_status;
     int num_of_bytes_to_receive;
     uint8_t *buf;
-    uint8_t *buf_write;
 };
