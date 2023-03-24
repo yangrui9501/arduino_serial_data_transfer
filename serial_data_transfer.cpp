@@ -1,39 +1,34 @@
 #include "serial_data_transfer.h"
 
-void SerialDataTransfer::init(HardwareSerial &_uart_handler, uint32_t _baud_rate, int _format, uint8_t _start_byte, uint8_t _finish_byte)
+void SerialDataTransfer::init(HardwareSerial& _uart_handler, uint32_t _baud_rate, int _config)
 {
     pUART = &_uart_handler;
-    start_byte = _start_byte;
-    finish_byte = _finish_byte;
-    pUART->begin(_baud_rate, _format);
+    baud_rate = _baud_rate;
+    config = _config;
+
+    frame_start.start_bytes[0] = 0xBB;
+    frame_start.start_bytes[1] = 0xAA;
 }
 
-int SerialDataTransfer::set_rx_buffer(size_t _dest_package_size)
+void SerialDataTransfer::begin()
 {
-    num_of_bytes_to_receive = _dest_package_size;
-    buf = new uint8_t[num_of_bytes_to_receive];
-    if (buf != NULL)
-    {
-        return 0;
-    }
-    return -1;
+    pUART->begin(baud_rate, config);
 }
 
-int SerialDataTransfer::receive(void *_dest)
+int SerialDataTransfer::receive(void* _dest, const int& num_of_bytes_to_receive)
 {
     uart_data_status = DATA_NOT_YET_READY;
     while (pUART->available() >= (num_of_bytes_to_receive + 2))
     {
-        if ((uint8_t)(pUART->read()) == start_byte) // Check for whether the start byte is correct
+        if ((uint8_t)(pUART->read()) == frame_start.start_bytes[0]) // Check for whether the start byte is correct
         {
-            pUART->readBytes(buf, num_of_bytes_to_receive); // Copy data bytes from serial buffer
-
-            if ((uint8_t)(pUART->read()) == finish_byte) // Check for whether the finish byte is correct
+            if ((uint8_t)(pUART->read()) == frame_start.start_bytes[1]) // Check for whether the finish byte is correct
             {
                 uart_data_status = DATA_OK;
 
                 /* Copy Data */
-                memcpy(_dest, buf, num_of_bytes_to_receive);
+                pUART->readBytes((uint8_t*)_dest, num_of_bytes_to_receive); // Copy data bytes from serial buffer
+
             }
             else
             {
@@ -48,14 +43,13 @@ int SerialDataTransfer::receive(void *_dest)
     return uart_data_status;
 }
 
-int SerialDataTransfer::transmit(void *_src, int num_of_bytes_to_transmit)
+int SerialDataTransfer::transmit(void* _src, const int& num_of_bytes_to_transmit)
 {
-    if (pUART->availableForWrite() >= num_of_bytes_to_transmit )
+    if (pUART->availableForWrite() >= num_of_bytes_to_transmit)
     {
-        pUART->write(&start_byte, 1);
-        pUART->write((uint8_t *)_src, num_of_bytes_to_transmit);
-        pUART->write(&finish_byte, 1);
-        // pUART->flush();
+        pUART->write(frame_start.start_bytes, 2);
+        pUART->write((uint8_t*)_src, num_of_bytes_to_transmit);
+        pUART->flush();
 
         return 0;
     }

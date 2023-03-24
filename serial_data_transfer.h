@@ -25,19 +25,57 @@ public:
         DATA_OK
     };
 
-    void init(HardwareSerial &_uart_handler, uint32_t _baud_rate, int _format = SERIAL_8N1, uint8_t _start_byte = 0xAA, uint8_t _finish_byte = 0xBB);
-    int set_rx_buffer(size_t _dest_package_size);
-    int receive(void *_dest);
-    int transmit(void *_src, int num_of_bytes_to_transmit);
-    HardwareSerial &get_serial_obj()
-    {
+    /**
+     * @brief Initialize serial data transfer
+     *
+     * @param _uart_handler Reference of serial port object
+     * @param _baud_rate Baud rate of serial
+     * @param _config Sets data, parity, and stop bits. For example: SERIAL_8N1
+     */
+    void init(HardwareSerial& _uart_handler, uint32_t _baud_rate, int _config = SERIAL_8N1);
+    
+    /**
+     * @brief Begin serial communication
+     * 
+     */
+    void begin();
+    
+    /**
+     * @brief Receive n bytes data
+     * 
+     * @param _dest Destination of data structure
+     * @param num_of_bytes_to_receive Number of bytes to receive
+     * @return int 
+     */
+    int receive(void* _dest, const int& num_of_bytes_to_receive);
+
+    /**
+     * @brief Transmit n bytes data from _src
+     * 
+     * @param _src Source data
+     * @param num_of_bytes_to_transmit Number of bytes to transmit
+     * @return int 
+     */
+    int transmit(void* _src, const int& num_of_bytes_to_transmit);
+
+    /**
+     * @brief Get the serial interface object
+     * 
+     * @return HardwareSerial& 
+     */
+    inline HardwareSerial& get_serial_interface() {
         return *pUART;
     }
 protected:
     uint8_t start_byte;
     uint8_t finish_byte;
-    HardwareSerial *pUART;
+
+    struct
+    {
+        uint8_t start_bytes[2];
+    } frame_start;
+    HardwareSerial* pUART;
+    uint32_t baud_rate;
+    int config;
     int uart_data_status;
-    int num_of_bytes_to_receive;
-    uint8_t *buf;
 };
