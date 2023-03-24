@@ -1,16 +1,18 @@
 #include "serial_data_transfer.h"
 
-void SerialDataTransfer::init(HardwareSerial& _uart_handler, uint32_t _baud_rate, int _format, uint8_t _start_byte, uint8_t _finish_byte)
+void SerialDataTransfer::init(HardwareSerial& _uart_handler, uint32_t _baud_rate, int _config)
 {
     pUART = &_uart_handler;
-    start_byte = _start_byte;
-    finish_byte = _finish_byte;
-
     baud_rate = _baud_rate;
-    format = _format;
+    config = _config;
 
     frame_start.start_bytes[0] = 0xBB;
     frame_start.start_bytes[1] = 0xAA;
+}
+
+void SerialDataTransfer::begin()
+{
+    pUART->begin(baud_rate, config);
 }
 
 int SerialDataTransfer::receive(void* _dest, const int& num_of_bytes_to_receive)
@@ -41,12 +43,10 @@ int SerialDataTransfer::receive(void* _dest, const int& num_of_bytes_to_receive)
     return uart_data_status;
 }
 
-int SerialDataTransfer::transmit(void* _src, int num_of_bytes_to_transmit)
+int SerialDataTransfer::transmit(void* _src, const int& num_of_bytes_to_transmit)
 {
     if (pUART->availableForWrite() >= num_of_bytes_to_transmit)
     {
-        // pUART->write(&finish_byte, 1);
-        // pUART->write(&start_byte, 1);
         pUART->write(frame_start.start_bytes, 2);
         pUART->write((uint8_t*)_src, num_of_bytes_to_transmit);
         pUART->flush();
