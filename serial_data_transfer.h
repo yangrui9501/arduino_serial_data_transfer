@@ -26,6 +26,10 @@ public:
     };
 
     void init(HardwareSerial &_uart_handler, uint32_t _baud_rate, int _format = SERIAL_8N1, uint8_t _start_byte = 0xAA, uint8_t _finish_byte = 0xBB);
+    void begin()
+    {
+        pUART->begin(baud_rate, format);
+    }
     int set_rx_buffer(size_t _dest_package_size);
     int receive(void *_dest);
     int transmit(void *_src, int num_of_bytes_to_transmit);
@@ -36,7 +40,14 @@ public:
 protected:
     uint8_t start_byte;
     uint8_t finish_byte;
+    
+    struct
+    {
+        uint8_t start_bytes[2];
+    } frame_start;
     HardwareSerial *pUART;
+    uint32_t baud_rate;
+    int format;
     int uart_data_status;
     int num_of_bytes_to_receive;
     uint8_t *buf;
