@@ -24,6 +24,7 @@ uart_data_t uart_data;
 void setup()
 {
     DataTx.init(HARDWARE_SERIAL_INTERFACE, HARDWARE_SERIAL_BAUD_RATE);
+    DataTx.begin();
 }
 
 void loop()
