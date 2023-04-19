@@ -67,9 +67,6 @@ public:
         return *pUART;
     }
 protected:
-    uint8_t start_byte;
-    uint8_t finish_byte;
-
     struct
     {
         uint8_t start_bytes[2];
