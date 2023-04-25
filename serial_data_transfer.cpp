@@ -49,7 +49,7 @@ int SerialDataTransfer::transmit(void* _src, const int& num_of_bytes_to_transmit
     {
         pUART->write(frame_start.start_bytes, 2);
         pUART->write((uint8_t*)_src, num_of_bytes_to_transmit);
-        pUART->flush();
+        // pUART->flush();
 
         return 0;
     }
