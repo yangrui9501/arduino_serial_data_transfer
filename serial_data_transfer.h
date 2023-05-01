@@ -84,6 +84,7 @@ public:
         case DATA_OK:
             return "Data OK";
         }
+        return "1";
     }
 protected:
     struct
